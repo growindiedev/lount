@@ -1,23 +1,35 @@
 const { PrismaClient, Prisma } = require('@prisma/client')
 const { ApolloServer, gql, UserInputError, AuthenticationError} = require('apollo-server')
-const prisma = new PrismaClient()
+require('dotenv').config()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const prisma = new PrismaClient()
+
 
 
 module.exports = {
     Query: {
-      getUsers: async () => {
+      getUsers: async (root, args, context) => {
+        
         try {
-          const users = await prisma.user.findMany();
-  
+          const currentUser = await context.currentUser
+          if (!currentUser) {
+            throw new AuthenticationError("not authenticated")
+          }
+          const users = await prisma.user.findMany({
+            where: {
+              NOT: {
+                username: currentUser.username
+              }
+            }
+          });
           return users;
         } catch (err) {
           console.log(err);
         }
       },
 
-      login: async (_, {username, password}) => {
+      login: async (root, {username, password}) => {
         let errors = {}
 
         try {
@@ -44,10 +56,13 @@ module.exports = {
             errors.password = 'password is incorrect'
             throw new AuthenticationError('password is incorrect', { errors })
           }
+
+          const userForToken = {
+            username: user.username,
+            id: user.id
+          }
   
-          const token = jwt.sign({ username }, process.env.SECRET, {
-            expiresIn: 60 * 60,
-          })
+          const token = jwt.sign( userForToken, process.env.SECRET)
   
           return {
             ...user,
@@ -63,7 +78,7 @@ module.exports = {
     },
 
     Mutation: {
-      register: async(_, args) => {
+      register: async(root, args) => {
         let { username, email, password, confirmPassword } = args
         let errors = {}
 
