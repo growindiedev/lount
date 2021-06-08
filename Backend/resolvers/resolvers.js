@@ -54,7 +54,7 @@ module.exports = {
   
           if (!correctPassword) {
             errors.password = 'password is incorrect'
-            throw new AuthenticationError('password is incorrect', { errors })
+            throw new UserInputError('password is incorrect', { errors })
           }
 
           const userForToken = {
@@ -85,19 +85,37 @@ module.exports = {
         try {
           // Validate input data
           if (email.trim() === '') errors.email = 'email must not be empty'
+          
+          if (Object.keys(errors).length > 0) {
+            throw new UserInputError('email must not be empty', { errors })
+          }
+
           if (username.trim() === '')
             errors.username = 'username must not be empty'
+          
+            if (Object.keys(errors).length > 0) {
+              throw new UserInputError('username must not be empty', { errors })
+            }
           if (password.trim() === '')
             errors.password = 'password must not be empty'
+
+            if (Object.keys(errors).length > 0) {
+              throw new UserInputError('password must not be empty', { errors })
+            }
+
           if (confirmPassword.trim() === '')
             errors.confirmPassword = 'repeat password must not be empty'
+          
+            if (Object.keys(errors).length > 0) {
+              throw new UserInputError('repeat password must not be empty', { errors })
+            }
   
           if (password !== confirmPassword)
             errors.confirmPassword = 'passwords must match'
   
-          if (Object.keys(errors).length > 0) {
-            throw errors
-          }
+            if (Object.keys(errors).length > 0) {
+              throw new UserInputError('passwords must match', { errors })
+            }
           const passwordHash = await bcrypt.hash(password, 10)
           const newUser = await prisma.user.create({
             data: {
@@ -110,12 +128,23 @@ module.exports = {
         } catch (e) {
           if (e instanceof Prisma.PrismaClientKnownRequestError) {
             // The .code property can be accessed in a type-safe manner
-            console.log("unique constraint error")
+            if (e.code === 'P2002') 
+              errors[e.code] = 'There is a unique constraint violation, a new user cannot be created with this email'
+            
+            if (Object.keys(errors).length > 0) {
+              throw new UserInputError('P2002', { errors })
+            }
+  
           } else if (e instanceof Prisma.PrismaClientValidationError){
-            console.log("missing arguments")
+            if (e.code === 'P2013') 
+              errors[e.code] = 'required arguments are missing'
+            
+            if (Object.keys(errors).length > 0) {
+              throw new UserInputError('P2013', { errors })
+            }
           }
           throw e;
-
+          
         }
 
       }
