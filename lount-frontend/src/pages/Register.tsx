@@ -1,8 +1,10 @@
 import React, {useState} from 'react'
 import { useMutation } from '@apollo/client'
 import { Link, useHistory } from 'react-router-dom'
-import { BiUserCircle, BiBookHeart } from 'react-icons/bi'
+import { BiUserCircle } from 'react-icons/bi'
 import {FcLock} from 'react-icons/fc'
+import {SiMinutemailer} from 'react-icons/si'
+
 import { REGISTER_USER } from '../queries'
 import {useFormik} from 'formik'
 import {
@@ -13,6 +15,7 @@ import {
 	Button,
 	FormControl,
 	Text,
+  FormLabel
 } from '@chakra-ui/react';
 import {register, registerVariables} from '../generated/register'
 
@@ -20,14 +23,14 @@ import {register, registerVariables} from '../generated/register'
 
 const Register = () => {
 
-    interface formikValues{
+    interface Values{
         email: string,
         username: string,
         password: string,
         confirmPassword: string
     }
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<Values>()
   const history = useHistory()
 
     const [registerUser, { loading }] = useMutation<register, registerVariables>(REGISTER_USER, {
@@ -35,7 +38,7 @@ const Register = () => {
         onError: (err: any) => setErrors(err.graphQLErrors[0].extensions.errors),
     })
 
-    const formik = useFormik<formikValues>({
+    const formik = useFormik<Values>({
         initialValues: {
         email: '',
         username: '',
@@ -71,12 +74,14 @@ const Register = () => {
                 onChange={formik.handleChange} 
                 value={formik.values.username}
                 bg='white'
+                borderColor={errors?.username ? 'red.400': 'whiteAlpha.200'}
                 />
             </InputGroup>
+            {errors?.username && <FormLabel color="red.400" fontSize="xs">{errors?.username}</FormLabel>}
           </FormControl>
           <FormControl isRequired>
                 <InputGroup>
-                    <InputLeftElement children={<BiBookHeart />} />
+                    <InputLeftElement children={<SiMinutemailer />} />
                     <Input
                     type='text'
                     name='email'
@@ -85,22 +90,27 @@ const Register = () => {
                     onChange={formik.handleChange} 
                     value={formik.values.email}
                     bg='white'
+                    borderColor={errors?.email ? 'red.400': 'whiteAlpha.200'}
                     />
                 </InputGroup>
+              {errors?.email && <FormLabel color="red.400" fontSize="xs">{errors?.email}</FormLabel>}
             </FormControl>
           <FormControl isRequired >
             <InputGroup>
               <InputLeftElement children={<FcLock/>} />
-              <Input
-                type='password'
-                placeholder='Password'
-                aria-label='Password'
-                name='password'
-                onChange={formik.handleChange}
-                value={formik.values.password}
-                bg='white'
-              />
+                <Input
+                  type='password'
+                  placeholder='Password'
+                  aria-label='Password'
+                  name='password'
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
+                  bg='white'
+                  borderColor={errors?.password ? 'red.400': 'whiteAlpha.200'}
+                />
             </InputGroup>
+            {errors?.password && <FormLabel color="red.400" fontSize="xs">{errors?.password}</FormLabel>}
+
           </FormControl>
         <FormControl isRequired>
                 <InputGroup>
@@ -113,8 +123,10 @@ const Register = () => {
                     onChange={formik.handleChange} 
                     value={formik.values.confirmPassword}
                     bg='white'
+                    borderColor={errors?.confirmPassword ? 'red.400': 'whiteAlpha.200'}
                     />
                 </InputGroup>
+                {errors?.confirmPassword && <FormLabel color="red.400" fontSize="xs">{errors?.confirmPassword}</FormLabel>}
             </FormControl>
         
           <Button
@@ -127,8 +139,8 @@ const Register = () => {
             >
             {loading ? 'loading..' : 'Register'}
           </Button>
-          <Text fontSize="sm" textAlign="center" color="gray.400">Created by Jarryingnut 👨‍💻</Text>
-          <Text>{loading ? 'loading..' : 'Register'}</Text>
+          <Text fontSize="sm" textAlign="center" color="gray.500">Created by Jarryingnut 👨‍💻<br /> Already have an account? <br/><Link to="/login">Login</Link>
+        </Text>
         </Stack>
       </form>
       )

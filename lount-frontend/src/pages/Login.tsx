@@ -1,10 +1,11 @@
-import React, {useEffect, useState}  from 'react'
+import React, { useState}  from 'react'
 import {useFormik} from 'formik'
 import { BiUserCircle } from 'react-icons/bi'
 import {FcLock} from 'react-icons/fc'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/client'
 import { LOGIN_USER } from '../queries'
+import { loginVariables, login_login} from '../generated/login'
 
 import {
 	Input,
@@ -14,7 +15,7 @@ import {
 	Button,
 	FormControl,
 	Text,
-	FormErrorMessage
+	FormLabel
 } from '@chakra-ui/react';
 
 const Login = () => {
@@ -29,10 +30,10 @@ const Login = () => {
 	const history = useHistory()
 
 	const [errors, setErrors] = useState<err | undefined>();
-	const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
-		onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
-		onCompleted(data) {
-		  localStorage.setItem('token', data.login.token)
+	const [loginUser, { loading }] = useLazyQuery<login_login, loginVariables>(LOGIN_USER, {
+		onError: (err: any) => setErrors(err.graphQLErrors[0].extensions.errors),
+		onCompleted: ({login: { token }}) => {
+		  localStorage.setItem('token', token)
 		  history.push('/')
 		},
 	  })
@@ -65,13 +66,15 @@ const Login = () => {
 							<InputLeftElement children={<BiUserCircle/>} />
 							<Input 
 								type='text' name='username'
+								placeholder='Username'
 								onChange={formik.handleChange}
 								value={formik.values.username}
 								area-label='username' 
 								bg='white'
+								borderColor={errors?.username ? 'red.400': 'whiteAlpha.200'}
 							/>
 						</InputGroup>
-						<FormErrorMessage>{errors?.username && errors?.username}</FormErrorMessage>
+						{errors?.username && <FormLabel color="red.400" fontSize="xs">{errors?.username}</FormLabel>}
 					</FormControl>
 					<FormControl isRequired >
 						<InputGroup>
@@ -80,13 +83,14 @@ const Login = () => {
 								type='password'
 								placeholder='Password'
 								aria-label='Password'
-								  name='password'
+								name='password'
 								onChange={formik.handleChange}
 								value={formik.values.password}
 								bg='white'
+								borderColor={errors?.password ? 'red.400': 'whiteAlpha.200'}
 							/>
 						</InputGroup>
-						<FormErrorMessage>{errors?.password && errors?.password}</FormErrorMessage>
+						{errors?.password && <FormLabel color="red.400" fontSize="xs">{errors?.password}</FormLabel>}
 
 					</FormControl>
 					<Button
@@ -94,12 +98,13 @@ const Login = () => {
 						boxShadow='sm'
 						_hover={{ boxShadow: 'md' }}
 						_active={{ boxShadow: 'lg' }}
-						  width="100"
-						  disabled={loading}
-						>
+						width="100"
+						disabled={loading}
+					>
               		{loading ? 'loading..' : 'Login'}
 					</Button>
-					<Text fontSize="sm" textAlign="center" color="gray.400">Created by Jarryingnut 👨‍💻</Text>
+					<Text fontSize="sm" textAlign="center" color="gray.500">Created by Jarryingnut 👨‍💻 <br/> Not registered ? <Link to="/register"> <br/> Register</Link>
+</Text>
 				</Stack>
 			</form>
 	  )

@@ -8,6 +8,7 @@
 // ====================================================
 
 export interface login_login {
+  login: any;
   __typename: "User";
   username: string;
   email: string;
@@ -15,8 +16,8 @@ export interface login_login {
   token: string | null;
 }
 
-export interface login {
-  login: login_login;
+export interface loginData {
+  login: login_login[];
 }
 
 export interface loginVariables {

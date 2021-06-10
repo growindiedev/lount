@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { ChakraProvider, Box } from "@chakra-ui/react"
+import { ChakraProvider, Box, VStack } from "@chakra-ui/react"
 
 import ApolloProvider from './ApolloProvider'
 
@@ -14,6 +14,7 @@ function App(): JSX.Element {
     <ApolloProvider>
     <ChakraProvider>
       <BrowserRouter>
+      <VStack spacing="5" p="10">
         <Box pt="5">
           <Switch>
             <Route exact path="/" component={Home} />
@@ -21,6 +22,7 @@ function App(): JSX.Element {
             <Route path="/login" component={Login} />
           </Switch>
         </Box>
+        </VStack>
       </BrowserRouter>
     </ChakraProvider>
     </ApolloProvider>
