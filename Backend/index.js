@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken')
 const prisma = new PrismaClient()
 
 
-const resolvers = require('./resolvers/resolvers')
-const typeDefs = require('./typeDefs/types')
+const resolvers = require('./resolvers')
+const typeDefs = require('./typeDefs/typesDefs')
 
 const server = new ApolloServer({
   typeDefs,
