@@ -33,7 +33,7 @@ const Login = () => {
 	const [loginUser, { loading }] = useLazyQuery<login_login, loginVariables>(LOGIN_USER, {
 		onError: (err: any) => setErrors(err.graphQLErrors[0].extensions.errors),
 		onCompleted: ({login: { token }}) => {
-		  localStorage.setItem('token', token)
+		  localStorage.setItem('chat-token', token)
 		  history.push('/')
 		},
 	  })
@@ -43,6 +43,7 @@ const Login = () => {
 		  username: '',
 		  password: ''
 		},
+		
 		onSubmit: async ({username, password} , {resetForm}) => {
 		  try {
 			loginUser({variables: {username, password}})

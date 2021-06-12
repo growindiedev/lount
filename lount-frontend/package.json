@@ -55,5 +55,9 @@
   "devDependencies": {
     "@types/react-router-dom": "^5.1.7",
     "apollo": "^2.33.4"
-  }
+  },
+  "resolutions": {
+    "apollo-link": "1.2.1"
+}
+
 }
