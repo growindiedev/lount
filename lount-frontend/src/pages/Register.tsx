@@ -20,7 +20,6 @@ import {
 import {register, registerVariables} from '../generated/register'
 
 
-
 const Register = () => {
 
     interface Values{

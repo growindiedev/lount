@@ -10,7 +10,7 @@ import { setContext } from '@apollo/client/link/context';
 
 
 const httpLink = createHttpLink({
-  uri: `http://localhost:4000`,
+  uri: 'http://localhost:4000',
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -20,7 +20,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: token ? `Bearer ${token}` : null,
     },
   }
 })
@@ -28,8 +28,8 @@ const authLink = setContext((_, { headers }) => {
 
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
   link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
 })
 
 export default function ApolloProvider(props: any) {

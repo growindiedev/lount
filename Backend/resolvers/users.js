@@ -58,7 +58,7 @@ module.exports = {
           }
 
           const userForToken = {
-            username: user.username,
+            username,
             id: user.id
           }
   

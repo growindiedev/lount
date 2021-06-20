@@ -30,3 +30,13 @@ mutation register(
   }
 }
 `
+
+export const GET_USERS = gql`
+query getUsers {
+  getUsers {
+    username
+    email
+    createdAt
+  }
+}
+`

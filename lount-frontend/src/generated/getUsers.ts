@@ -4,22 +4,16 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: login
+// GraphQL query operation: getUsers
 // ====================================================
 
-export interface login_login {
-  __typename: "Login";
+export interface getUsers_getUsers {
+  __typename: "User";
   username: string;
   email: string;
   createdAt: string;
-  token: string;
 }
 
-export interface login {
-  login: login_login;
-}
-
-export interface loginVariables {
-  username: string;
-  password: string;
+export interface getUsers {
+  getUsers: (getUsers_getUsers | null)[];
 }

@@ -5,7 +5,9 @@ import {FcLock} from 'react-icons/fc'
 import { useHistory, Link } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/client'
 import { LOGIN_USER } from '../queries'
-import { loginVariables, login_login} from '../generated/login'
+import { login, loginVariables } from '../generated/login'
+import { useAuthDispatch } from '../context/auth'
+
 
 import {
 	Input,
@@ -20,33 +22,29 @@ import {
 
 const Login = () => {
 
-	interface err {
-		username: string,
-		password: string
-	}
-
 	
-
 	const history = useHistory()
+	const dispatch = useAuthDispatch()
 
-	const [errors, setErrors] = useState<err | undefined>();
-	const [loginUser, { loading }] = useLazyQuery<login_login, loginVariables>(LOGIN_USER, {
+	const [errors, setErrors] = useState<loginVariables | undefined>();
+	const [loginUser, { loading }] = useLazyQuery<login, loginVariables>(LOGIN_USER, {
 		onError: (err: any) => setErrors(err.graphQLErrors[0].extensions.errors),
-		onCompleted: ({login: { token }}) => {
-		  localStorage.setItem('chat-token', token)
-		  history.push('/')
+		onCompleted: ({login}) => {
+			dispatch({ type: 'LOGIN', payload: login })
+		  	history.push('/')
 		},
+
 	  })
 
-	  const formik = useFormik<err>({
+	  const formik = useFormik<loginVariables>({
 		initialValues: {
 		  username: '',
 		  password: ''
 		},
-		
+
 		onSubmit: async ({username, password} , {resetForm}) => {
 		  try {
-			loginUser({variables: {username, password}})
+			await loginUser({variables: {username, password}})
 			resetForm()
 		  } catch (err) {
 			console.error(err)
@@ -105,7 +103,7 @@ const Login = () => {
               		{loading ? 'loading..' : 'Login'}
 					</Button>
 					<Text fontSize="sm" textAlign="center" color="gray.500">Created by Jarryingnut 👨‍💻 <br/> Not registered ? <Link to="/register"> <br/> Register</Link>
-</Text>
+				</Text>
 				</Stack>
 			</form>
 	  )
