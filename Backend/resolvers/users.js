@@ -16,16 +16,40 @@ module.exports = {
           if (!currentUser) {
             throw new AuthenticationError("not authenticated")
           }
-          const users = await prisma.user.findMany({
+          let users = await prisma.user.findMany({
             where: {
               NOT: {
                 username: currentUser.username
               }
-            }
+            },
           });
+
+          const allUserMessages = await prisma.message.findMany({
+            where: {
+              OR: [
+                {
+                  from: currentUser.username
+                },
+                {
+                  to: currentUser.username
+                }
+              ]
+            },
+            orderBy: {
+                    createdAt: 'desc'
+                } 
+            })
+
+          users = users.map(otherUser => {
+            const latestMessage = allUserMessages.find(
+              m => m.from === otherUser.username || m.to === otherUser.username
+            )
+            otherUser.latestMessage = latestMessage
+            return otherUser
+          })
           return users;
-        } catch (err) {
-          console.log(err);
+        } catch (error) {
+          console.log(error);
         }
       },
 

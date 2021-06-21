@@ -6,6 +6,8 @@ module.exports = gql`
     email: String!
     createdAt: String!
     token: String
+    imageUrl: String!
+    latestMessage: Message
   }
 
   type Message {
