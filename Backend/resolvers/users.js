@@ -22,6 +22,11 @@ module.exports = {
                 username: currentUser.username
               }
             },
+            select: {
+              username: true,
+              imageUrl: true,
+              createdAt: true
+            }
           });
 
           const allUserMessages = await prisma.message.findMany({
