@@ -105,7 +105,7 @@ module.exports = {
 
     Mutation: {
       register: async(root, args) => {
-        let { username, email, password, confirmPassword } = args
+        let { username, email, password, confirmPassword, imageUrl} = args
         let errors = {}
 
         try {
@@ -142,10 +142,17 @@ module.exports = {
             if (Object.keys(errors).length > 0) {
               throw new UserInputError('passwords must match', { errors })
             }
+
+            if (imageUrl.trim() === '')
+            errors.imageUrl = 'image url must not be empty'
+          
+            if (Object.keys(errors).length > 0) {
+              throw new UserInputError('image url must not be empty', { errors })
+            }
           const passwordHash = await bcrypt.hash(password, 10)
           const newUser = await prisma.user.create({
             data: {
-              username, email, password: passwordHash
+              username, email, password: passwordHash, imageUrl
             }
           })
 
