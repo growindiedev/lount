@@ -8,11 +8,11 @@
 // ====================================================
 
 export interface login_login {
-  __typename: "Login";
+  __typename: "User";
   username: string;
-  email: string;
+  email: string | null;
   createdAt: string;
-  token: string;
+  token: string | null;
 }
 
 export interface login {

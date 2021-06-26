@@ -1,41 +1,53 @@
 
-import React  from 'react'
+import React, {useEffect, useState}  from 'react'
 import { useHistory, NavLink} from 'react-router-dom'
 import { useAuthDispatch } from '../context/auth'
-import { useQuery } from '@apollo/client'
-import { GET_USERS } from '../queries'
-import {Box, Text, Flex, VStack } from '@chakra-ui/react'
+import { useQuery, useLazyQuery } from '@apollo/client'
+import { GET_USERS, GET_MESSAGES } from '../queries'
+import {Box, HStack,VStack, Flex, Text, Avatar } from '@chakra-ui/react'
 import { getUsers, getUsers_getUsers} from '../generated/getUsers'
 
 
 export default function Home() {
   const history = useHistory()
-  const dispatch = useAuthDispatch()
+  const [selectedUser, setSelectedUser] = useState<any>(null)
+
 
   
-
-  const logout = () => {
-    dispatch({ type: 'LOGOUT' }) 
-    history.push('/login')
-  }
-  
-  const { loading, data } = useQuery<getUsers, getUsers_getUsers>(GET_USERS)
+  const { loading, data, error } = useQuery<getUsers, getUsers_getUsers>(GET_USERS)
+  const [ getMessages, { loading: messagesLoading, data: messagesData }, ] = useLazyQuery(GET_MESSAGES)
 
   if (data) {
     console.log(data)
   }
 
+  useEffect(() => {
+    if (selectedUser) {
+      getMessages({ variables: { from: selectedUser } })
+    }
+  }, [selectedUser, data])
+
+  if (messagesData) console.log(messagesData.getMessages)
+
   let usersMarkup
 
-  if (!data || loading) {
+  if (!data || loading ) {
     usersMarkup = <p>Loading..</p>
   } else if (data.getUsers.length === 0) {
     usersMarkup = <p>No users have joined yet</p>
   } else if (data.getUsers.length > 0) {
     usersMarkup = data.getUsers.map((user, i) => (
-      <div key={i}>
-        <p>{user?.username}</p>
-      </div>
+      <Box key={i} as="button" onClick={() => setSelectedUser(user?.username)}>
+        <Flex p="3">
+          <Avatar src={user?.imageUrl} m="2"/>
+          <div>
+            <Text>{user?.username}</Text>
+            <Text>
+              {user?.latestMessage ? user.latestMessage.content: 'you are now connected'}
+            </Text>
+          </div>
+        </Flex>
+      </Box>
     ))
   }
 
@@ -44,7 +56,7 @@ export default function Home() {
 
   return (
     <>   
-    <Flex  align="center" px="40"  bg="gray.200" py="1.5" color="gray.600" >
+    {/* <Flex  align="center" px="40"  bg="gray.200" py="1.5" color="gray.600" >
         
         <Box px="2"> 
         <Text size="sm" fontWeight="semibold" _hover={{ color: 'orange.400' }}><NavLink to="/login" >login</NavLink></Text>
@@ -56,11 +68,19 @@ export default function Home() {
         <Text size="sm" fontWeight="semibold" _hover={{ color: 'orange.400' }} as="button" onClick={logout}>Logout</Text>
         </Box>   
 
-    </Flex>
-    <VStack>
-      <Box>{usersMarkup}</Box>
-      <Box>Messages</Box>
-    </VStack>
+    </Flex> */}
+    <HStack>
+      <VStack>{usersMarkup}</VStack>
+      <Box>
+          {messagesData && messagesData.getMessages.length > 0 ? (
+            messagesData.getMessages.map((message: { uuid: React.Key | null | undefined; content: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined }) => (
+              <p key={message.uuid}>{message.content}</p>
+            ))
+          ) : (
+            <p>Messages</p>
+          )}
+      </Box>
+    </HStack>
 
     </>
 )

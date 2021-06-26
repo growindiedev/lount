@@ -32,8 +32,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint './src/**/*.{ts,tsx}'",
-    "apollo-type": "npx apollo client:codegen --target typescript --localSchemaFile output.gql --outputFlat --includes \"./src/**\" --excludes \"src/generated\"  src/generated",
-    "apollo-schema": "npx apollo client:download-schema --endpoint=http://localhost:4000/ output.gql"
+    "apollo-schema": "npx apollo client:download-schema --endpoint=http://localhost:4000/ output.gql",
+    "apollo-type": "npx apollo client:codegen --target typescript --localSchemaFile output.gql --outputFlat --includes \"./src/**\" --excludes \"src/generated\"  src/generated"
   },
   "eslintConfig": {
     "extends": [

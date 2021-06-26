@@ -24,7 +24,7 @@ if(token) {
     if (new Date() > expiresAt) {
         localStorage.removeItem('chat-token')
       } else {
-        user = decodedToken && decodedToken
+        user =  decodedToken
       }
     } else console.log('No token found')
 
@@ -39,7 +39,7 @@ const authReducer = (state: any, action: Action) => {
           user: action.payload,
         }
       case 'LOGOUT':
-        localStorage.removeItem('chat-token')
+        localStorage.clear()
         return {
           ...state,
           user: null,
@@ -65,4 +65,5 @@ const authReducer = (state: any, action: Action) => {
    
 export const useAuthState = () => useContext(AuthStateContext)
 export const useAuthDispatch = () => useContext(AuthDispatchContext) 
+
 

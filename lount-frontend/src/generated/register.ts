@@ -10,7 +10,7 @@
 export interface register_register {
   __typename: "User";
   username: string;
-  email: string;
+  email: string | null;
   createdAt: string;
 }
 
