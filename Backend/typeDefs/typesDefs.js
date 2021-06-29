@@ -7,7 +7,7 @@ module.exports = gql`
     createdAt: String!
     token: String
     imageUrl: String!
-    latestMessage: Message!
+    latestMessage: Message
   }
 
   type Message {
@@ -22,7 +22,6 @@ module.exports = gql`
     getUsers: [User]!
     login(username: String!, password: String!): User!
     getMessages(from: String!): [Message]!
-
   }
 
   type Mutation {
@@ -31,9 +30,8 @@ module.exports = gql`
       email: String!
       password: String!
       confirmPassword: String!
+      imageUrl: String!
     ): User!
     sendMessage(to: String!, content: String!): Message!
   }
-
-  
 `

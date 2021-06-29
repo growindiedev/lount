@@ -39,8 +39,8 @@ module.exports = {
                 } 
             })
             return messages
-        } catch (err){
-            console.log(err)
+        } catch (erri){
+            console.log(erri)
             }  
 
         }

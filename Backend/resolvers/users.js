@@ -22,11 +22,11 @@ module.exports = {
                 username: currentUser.username
               }
             },
-            select: {
-              username: true,
-              imageUrl: true,
-              createdAt: true
-            }
+            // select: {
+            //   username: true,
+            //   imageUrl: true,
+            //   createdAt: true
+            // }
           });
 
           const allUserMessages = await prisma.message.findMany({
@@ -65,7 +65,7 @@ module.exports = {
           if (username.trim() === '')
             errors.username = 'username must not be empty'
           if (password === '') errors.password = 'password must not be empty'
-  
+          
           if (Object.keys(errors).length > 0) {
             throw new UserInputError('bad input', { errors })
           }
@@ -91,13 +91,13 @@ module.exports = {
             id: user.id
           }
   
-          const token = jwt.sign( userForToken, process.env.SECRET, {
+          const token = await jwt.sign( userForToken, process.env.SECRET, {
             expiresIn: 60 * 60,
           })
   
           return {
             ...user,
-            createdAt: user.createdAt.toISOString(),
+            createdAt: user.createdAt,
             token,
           }
         } catch (err) {

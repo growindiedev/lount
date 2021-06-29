@@ -17,10 +17,10 @@
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "eslint": "^7.26.0",
-    "prisma": "^2.23.0"
+    "prisma": "^2.25.0"
   },
   "dependencies": {
-    "@prisma/client": "^2.23.0",
+    "@prisma/client": "^2.25.0",
     "@types/graphql": "^14.5.0",
     "apollo-link-context": "^1.0.20",
     "apollo-server": "^2.24.1",

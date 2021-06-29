@@ -4,13 +4,15 @@ import { ChakraProvider, Box, VStack } from "@chakra-ui/react"
 import ApolloProvider from './ApolloProvider'
 
 
-import Home from './pages/Home'
+import Home from './pages/home/Home'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Navbar from './Navbar'
 
 
 import { AuthProvider } from './context/auth'
+import { MessageProvider } from './context/message'
+
 import DynamicRoute from './util/DynamicRoute'
 
 
@@ -18,6 +20,7 @@ function App(): JSX.Element {
   return (
     <ApolloProvider>
     <ChakraProvider>
+    <MessageProvider> 
     <AuthProvider> 
       <BrowserRouter>
       <Navbar/>
@@ -32,6 +35,7 @@ function App(): JSX.Element {
         </VStack>
       </BrowserRouter>
       </AuthProvider>
+      </MessageProvider> 
     </ChakraProvider>
     </ApolloProvider>
   )
