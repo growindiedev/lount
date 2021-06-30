@@ -7,6 +7,7 @@ import { useLazyQuery } from '@apollo/client'
 import { LOGIN_USER } from '../queries'
 import { login, loginVariables } from '../generated/login'
 import { useAuthDispatch } from '../context/auth'
+import { VStack } from '@chakra-ui/react'
 
 
 import {
@@ -53,6 +54,7 @@ const Login = () => {
 	  });
     
      return (
+		<VStack spacing="5" p="10" margin="20">
 		<form onSubmit={formik.handleSubmit}>
 				<Stack spacing={3} bg="gray.200"
 				w='350px'
@@ -106,6 +108,7 @@ const Login = () => {
 				</Text>
 				</Stack>
 			</form>
+			</VStack>
 	  )
 }
 

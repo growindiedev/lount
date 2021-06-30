@@ -39,34 +39,38 @@ function Users(): ReactElement {
   } else if (users.length > 0) {
     usersMarkup = users.map((user: User) => {
       const selected = selectedUser === user.username
+
       return (
         <Flex
-          p="3"  
-          key={user.username}
-          _hover={{ bgColor: selected && 'grey.200' }}
-          onClick={() =>
-            dispatch({ type: 'SET_SELECTED_USER', payload: user.username })
-            
+        width="100%"
+        as="button"
+        key={user.username}
+        p="3"
+        justifyContent="flex-start"
+        _hover={{ bg:  'gray.200' }}
+        onClick={() => dispatch({ type: 'SET_SELECTED_USER', payload: user.username })
+      
           }
         >
           <Avatar
             src={user.imageUrl}
-            mr="2"
+            mx="3"
+            size="md"
           />
-          <Box>
-            <Text >{user.username}</Text>
-            <Text fontWeight="medium">
+          <VStack alignItems="flex-start">
+            <Text fontSize="md">{user.username}</Text>
+            <Text fontWeight="thin" fontSize="sm" isTruncated>
               {user.latestMessage
                 ? user.latestMessage.content
                 : 'You are now connected!'}
             </Text>
-          </Box>
+          </VStack>
         </Flex>
       )
     })
   }
   return (
-    <VStack p="0" bgColor="aqua" >
+    <VStack  bgColor="gray.100" width="30%" >
       {usersMarkup}
     </VStack>
   )

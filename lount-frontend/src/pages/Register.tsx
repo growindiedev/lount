@@ -15,7 +15,8 @@ import {
 	Button,
 	FormControl,
 	Text,
-  FormLabel
+  FormLabel,
+  VStack
 } from '@chakra-ui/react';
 import {register, registerVariables} from '../generated/register'
 
@@ -56,6 +57,7 @@ const Register = () => {
     })
 
      return (
+      <VStack spacing="5" p="10" pt="5" margin="20">
         <form onSubmit={formik.handleSubmit}>
         <Stack spacing={3} bg="gray.200"
         w='350px'
@@ -142,6 +144,7 @@ const Register = () => {
         </Text>
         </Stack>
       </form>
+      </VStack>
       )
       
 }

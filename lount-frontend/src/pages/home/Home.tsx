@@ -1,18 +1,17 @@
 
 import React from 'react'
 
-import {HStack } from '@chakra-ui/react'
+import {Flex } from '@chakra-ui/react'
 import Messages from './Messages'
 import Users from './Users'
 
 export default function Home() {
   
-// const AuthDispatchContext = createContext<Dispatch | any>(undefined)
 
   return (
-    <HStack>
+    <Flex  m="16"  bg="white.100" height="xl">
       <Users />
       <Messages />
-    </HStack>
+    </Flex>
   )
 }

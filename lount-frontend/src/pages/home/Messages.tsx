@@ -61,7 +61,7 @@ function Messages(): ReactElement {
 
 
     return (
-        <VStack>
+        <VStack width="70%" bgColor="whiteAlpha.900">
             {selectedChatMarkup}
         </VStack>
     )

@@ -47,9 +47,42 @@
       
     },
     {
+      content: "That's cool! I'm joining the 'remote club' too",
+      from: 'henry',
+      to: 'jane',
+      
+    },
+    {
+      content: 'Really? how come?',
+      from: 'jane',
+      to: 'henry',
+    },
+    {
+      content: 'got promoted to a consultancy role',
+      from: 'henry',
+      to: 'jane',
+    },
+    {
+      content: "That's amazing!! well done!",
+      from: 'jane',
+      to: 'henry',
+    },
+    {
+      content: 'Thanks ;)',
+      from: 'john',
+      to: 'jane',
+    },
+    
+    {
       content: 'Hey henry, are you done with that task?',
       from: 'boss',
       to: 'henry',
+      
+    },
+    {
+      content: 'It\'s almost done',
+      from: 'henry',
+      to: 'boss',
       
     },
   ]

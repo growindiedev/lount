@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Switch } from 'react-router-dom'
-import { ChakraProvider, Box, VStack } from "@chakra-ui/react"
+import { ChakraProvider, Box, VStack, HStack } from "@chakra-ui/react"
 import ApolloProvider from './ApolloProvider'
 
 
@@ -12,6 +12,7 @@ import Navbar from './Navbar'
 
 import { AuthProvider } from './context/auth'
 import { MessageProvider } from './context/message'
+import theme from './theme'
 
 import DynamicRoute from './util/DynamicRoute'
 
@@ -19,20 +20,16 @@ import DynamicRoute from './util/DynamicRoute'
 function App(): JSX.Element {
   return (
     <ApolloProvider>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
     <MessageProvider> 
     <AuthProvider> 
       <BrowserRouter>
       <Navbar/>
-      <VStack spacing="5" p="10">
-        <Box pt="5">
           <Switch>
-            <DynamicRoute exact path="/" component={Home} authenticated/>
-            <DynamicRoute path="/register" component={Register} guest/>
-            <DynamicRoute path="/login" component={Login} guest/>
+              <DynamicRoute exact path="/" component={Home} authenticated/>
+              <DynamicRoute path="/register" component={Register} guest/>
+              <DynamicRoute path="/login" component={Login} guest/>
           </Switch>
-        </Box>
-        </VStack>
       </BrowserRouter>
       </AuthProvider>
       </MessageProvider> 
