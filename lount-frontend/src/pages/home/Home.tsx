@@ -9,7 +9,7 @@ export default function Home() {
   
 
   return (
-    <Flex  m="16"  bg="white.100" height="xl">
+    <Flex  m="16"  bg="white.100" height="xl" >
       <Users />
       <Messages />
     </Flex>

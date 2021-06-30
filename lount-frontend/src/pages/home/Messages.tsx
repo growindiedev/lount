@@ -4,7 +4,7 @@ import { GET_MESSAGES } from '../../queries'
 import {getMessages} from '../../generated/getMessages'
 import {  VStack } from '@chakra-ui/react'
 import { useMessageDispatch, useMessageState } from '../../context/message'
-
+import Message from './Message'
 
 function Messages(): ReactElement {
 
@@ -53,7 +53,7 @@ function Messages(): ReactElement {
         selectedChatMarkup = <p>Loading..</p>
       } else if (messages.length > 0) {
         selectedChatMarkup = messages.map((message: Message) => (
-          <p key={message.uuid}>{message.content}</p>
+          <Message message={message} key={message.uuid}/>
         ))
       } else if (messages.length === 0) {
         selectedChatMarkup = <p>You are now connected! send your first message!</p>
@@ -61,7 +61,7 @@ function Messages(): ReactElement {
 
 
     return (
-        <VStack width="70%" bgColor="whiteAlpha.900">
+        <VStack width="70%" bgColor="whiteAlpha.900" alignItems="flex-start" overflowY="scroll" >
             {selectedChatMarkup}
         </VStack>
     )

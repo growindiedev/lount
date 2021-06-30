@@ -5,6 +5,7 @@ import { useMessageDispatch, useMessageState } from '../../context/message'
 import {getMessages} from '../../generated/getMessages'
 import {getUsers_getUsers_latestMessage} from '../../generated/getUsers'
 import {Box, VStack, Flex, Text, Avatar } from '@chakra-ui/react'
+import classNames from 'classnames'
 
 
 
@@ -48,9 +49,8 @@ function Users(): ReactElement {
         p="3"
         justifyContent="flex-start"
         _hover={{ bg:  'gray.200' }}
-        onClick={() => dispatch({ type: 'SET_SELECTED_USER', payload: user.username })
-      
-          }
+        onClick={() => dispatch({ type: 'SET_SELECTED_USER', payload: user.username })}
+        bg={classNames({'gray.200': selected})}
         >
           <Avatar
             src={user.imageUrl}
