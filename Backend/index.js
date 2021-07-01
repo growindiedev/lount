@@ -1,7 +1,10 @@
 
-const { ApolloServer } = require('apollo-server')
+const { ApolloServer, PubSub } = require('apollo-server')
 const { PrismaClient, Prisma } = require('@prisma/client')
 const jwt = require('jsonwebtoken')
+const pubsub = new PubSub()
+
+
 const prisma = new PrismaClient()
 
 
@@ -11,19 +14,24 @@ const typeDefs = require('./typeDefs/typesDefs')
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ req }) => {
-    const auth = req ? req.headers.authorization : null
-    if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      const decodedToken = jwt.verify(
-        auth.substring(7), process.env.SECRET
-      )
-      const currentUser = await prisma.user.findUnique({
-        where : {
-          username: decodedToken.username
-        }
-      })
-      return { currentUser }
+  context: (context) => {
+    let token
+    if (context.req && context.req.headers.authorization) {
+      token = context.req.headers.authorization.split('Bearer ')[1]
+    } else if (context.connection && context.connection.context.Authorization) {
+      token = context.connection.context.Authorization.split('Bearer ')[1]
     }
+  
+    if (token) {
+      jwt.verify(token, process.env.SECRET , (err, decodedToken) => {
+        context.currentUser = decodedToken
+      })
+    }
+    
+    context.pubsub = pubsub
+    context.pubsub = pubsub
+  
+    return context
   }
 })
 

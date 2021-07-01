@@ -1,4 +1,4 @@
-const { UserInputError, AuthenticationError } = require('apollo-server')
+const { UserInputError, AuthenticationError, withFilter, PubSub } = require('apollo-server')
 const { PrismaClient, Prisma } = require('@prisma/client')
 require('dotenv').config()
 
@@ -20,15 +20,7 @@ module.exports = {
 
             const messages = await client.message.findMany({
                 where: {
-                    // AND: [
-                    //     { 
-                    //         from: {in: [currentUser.username, otherUser.username]},
-                    //     },
-                    //     { 
-                    //         to: {in: [currentUser.username, otherUser.username]},
-                    //     }
-
-                    // ]                    
+                                     
                     from: {in: [currentUser.username, otherUser.username]},
                     to: {in: [currentUser.username, otherUser.username]},
 
@@ -47,7 +39,7 @@ module.exports = {
     },
 
     Mutation: {
-        sendMessage: async (parent, { to, content }, {currentUser}) => {
+        sendMessage: async (parent, { to, content }, {currentUser, pubsub}) => {
             try {
                 if (!currentUser) throw new AuthenticationError('Unauthenticated')
                 const recipient = await client.user.findUnique({
@@ -71,6 +63,8 @@ module.exports = {
                           content
                       }
                   })
+
+                  pubsub.publish('NEW_MESSAGE', { newMessage: message })
                   return message
 
             } catch (err) {
@@ -78,7 +72,26 @@ module.exports = {
                 throw err
             }
         }
+    },
+
+    Subscription: {
+        newMessage: {
+          subscribe: withFilter(
+            (_, __, {  currentUser, pubsub }) => {
+              if (!currentUser) throw new AuthenticationError('Unauthenticated')
+              return pubsub.asyncIterator(['NEW_MESSAGE'])
+            },
+            ({ newMessage }, _, { currentUser }) => {
+              if (
+                newMessage.from === currentUser.username ||
+                newMessage.to === currentUser.username
+              ) {
+                return true
+              }
+    
+              return false
+            }
+          ),
+        },
+      },
     }
-
-
-}
