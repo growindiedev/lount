@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Switch } from 'react-router-dom'
-import { ChakraProvider, Box, VStack, HStack } from "@chakra-ui/react"
+import { ChakraProvider } from "@chakra-ui/react"
 import ApolloProvider from './ApolloProvider'
 
 
