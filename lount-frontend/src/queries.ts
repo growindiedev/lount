@@ -18,12 +18,14 @@ mutation register(
   $email: String!
   $password: String!
   $confirmPassword: String!
+  $imageUrl: String
 ) {
   register(
     username: $username
     email: $email
     password: $password
     confirmPassword: $confirmPassword
+    imageUrl: $imageUrl
   ) {
     username
     email
@@ -60,4 +62,28 @@ export const GET_MESSAGES = gql`
       createdAt
     }
   }
+`
+
+export const SEND_MESSAGE = gql`
+  mutation sendMessage($to: String!, $content: String!) {
+    sendMessage(to: $to, content: $content) {
+      uuid
+      from
+      to
+      content
+      createdAt
+    }
+  }
+`
+
+export const NEW_MESSAGE = gql`
+subscription newMessage {
+  newMessage {
+    uuid
+    from
+    to
+    content
+    createdAt
+  }
+}
 `

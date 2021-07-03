@@ -28,9 +28,7 @@ const server = new ApolloServer({
       })
     }
     
-    context.pubsub = pubsub
-    context.pubsub = pubsub
-  
+    context.pubsub = pubsub  
     return context
   }
 })

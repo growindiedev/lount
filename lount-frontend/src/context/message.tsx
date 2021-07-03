@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useContext } from 'react'
 import {getMessages} from '../generated/getMessages'
-//import {getUsers, getUsers_getUsers} from '../generated/getUsers'
+
 type Message_ = {
   uuid: string,
   from: string,
@@ -23,7 +23,6 @@ const MessageDispatchContext = createContext<Dispatch | any>(undefined)
 
 const messageReducer = (state: any , action: Action) => {
   let usersCopy, userIndex
-
   const { username, message, messages } = action.payload
 
     switch (action.type) {

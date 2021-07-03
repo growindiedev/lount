@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { useMutation } from '@apollo/client'
 import { Link, useHistory } from 'react-router-dom'
-import { BiUserCircle } from 'react-icons/bi'
+import { BiUserCircle, BiImageAdd } from 'react-icons/bi'
 import {FcLock} from 'react-icons/fc'
 import {SiMinutemailer} from 'react-icons/si'
 
@@ -27,7 +27,8 @@ const Register = () => {
         email: string,
         username: string,
         password: string,
-        confirmPassword: string
+        confirmPassword: string,
+        imageUrl: string
     }
 
   const [errors, setErrors] = useState<Values>()
@@ -44,11 +45,12 @@ const Register = () => {
         username: '',
         password: '',
         confirmPassword: '',
+        imageUrl: ''
         },
-        onSubmit: async ({username, password, email, confirmPassword}, {resetForm}) => {
+        onSubmit: async ({username, password, email, confirmPassword, imageUrl}, {resetForm}) => {
         
         try {
-            await registerUser({variables: {email, username, password, confirmPassword}})
+            await registerUser({variables: {email, username, password, confirmPassword, imageUrl}})
             resetForm()
         } catch (err) {
             console.log({error: err})
@@ -128,7 +130,21 @@ const Register = () => {
                     />
                 </InputGroup>
                 {errors?.confirmPassword && <FormLabel color="red.400" fontSize="xs">{errors?.confirmPassword}</FormLabel>}
-            </FormControl>
+          </FormControl>
+          <FormControl >
+                <InputGroup>
+                    <InputLeftElement children={<BiImageAdd />} />
+                    <Input
+                    type='text'
+                    name='imageUrl'
+                    placeholder='Profile picture URL'
+                    aria-label='imageUrl'
+                    onChange={formik.handleChange} 
+                    value={formik.values.imageUrl }
+                    bg='white'
+                    />
+                </InputGroup>
+          </FormControl>
         
           <Button
             type='submit'
@@ -140,8 +156,7 @@ const Register = () => {
             >
             {loading ? 'loading..' : 'Register'}
           </Button>
-          <Text fontSize="sm" textAlign="center" color="gray.500">Created by Jarryingnut 👨‍💻<br /> Already have an account? <br/><Link to="/login">Login</Link>
-        </Text>
+          <Text fontSize="sm" textAlign="center" color="gray.500">Created by Jarryingnut 👨‍💻</Text>
         </Stack>
       </form>
       </VStack>

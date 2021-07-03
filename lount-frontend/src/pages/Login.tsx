@@ -1,8 +1,8 @@
-import React, { useState}  from 'react'
+import React, { useState }  from 'react'
 import {useFormik} from 'formik'
 import { BiUserCircle } from 'react-icons/bi'
 import {FcLock} from 'react-icons/fc'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/client'
 import { LOGIN_USER } from '../queries'
 import { login, loginVariables } from '../generated/login'
@@ -24,7 +24,6 @@ import {
 const Login = () => {
 
 	
-	const history = useHistory()
 	const dispatch = useAuthDispatch()
 
 	const [errors, setErrors] = useState<loginVariables | undefined>();
@@ -32,9 +31,9 @@ const Login = () => {
 		onError: (err: any) => setErrors(err.graphQLErrors[0].extensions.errors),
 		onCompleted: ({login}) => {
 			dispatch({ type: 'LOGIN', payload: login })
-		  	history.push('/')
+			window.location.href = '/'
 		},
-
+		
 	  })
 
 	  const formik = useFormik<loginVariables>({
@@ -104,8 +103,7 @@ const Login = () => {
 					>
               		{loading ? 'loading..' : 'Login'}
 					</Button>
-					<Text fontSize="sm" textAlign="center" color="gray.500">Created by Jarryingnut 👨‍💻 <br/> Not registered ? <Link to="/register"> <br/> Register</Link>
-				</Text>
+					<Text fontSize="sm" textAlign="center" color="gray.500">Created by Jarryingnut 👨‍💻 </Text>
 				</Stack>
 			</form>
 			</VStack>

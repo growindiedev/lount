@@ -4,7 +4,7 @@ import { GET_USERS } from '../../queries'
 import { useMessageDispatch, useMessageState } from '../../context/message'
 import {getMessages} from '../../generated/getMessages'
 import {getUsers_getUsers_latestMessage} from '../../generated/getUsers'
-import {Box, VStack, Flex, Text, Avatar } from '@chakra-ui/react'
+import {VStack, Flex, Text, Avatar } from '@chakra-ui/react'
 import classNames from 'classnames'
 
 
@@ -53,13 +53,13 @@ function Users(): ReactElement {
         bg={classNames({'gray.200': selected})}
         >
           <Avatar
-            src={user.imageUrl}
+            src={user.imageUrl || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'}
             mx="3"
             size="md"
           />
-          <VStack alignItems="flex-start">
+          <VStack alignItems="flex-start" isTruncated >
             <Text fontSize="md">{user.username}</Text>
-            <Text fontWeight="thin" fontSize="sm" isTruncated>
+            <Text fontWeight="thin" fontSize="sm" >
               {user.latestMessage
                 ? user.latestMessage.content
                 : 'You are now connected!'}
@@ -70,7 +70,7 @@ function Users(): ReactElement {
     })
   }
   return (
-    <VStack  bgColor="gray.100" width="30%" >
+    <VStack  bgColor="gray.100" width="30%" overflowY="scroll" >
       {usersMarkup}
     </VStack>
   )

@@ -27,7 +27,7 @@ module.exports = {
                 },
 
                 orderBy: {
-                    createdAt: 'asc'
+                    createdAt: 'desc'
                 } 
             })
             return messages

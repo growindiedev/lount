@@ -1,5 +1,5 @@
 const { PrismaClient, Prisma } = require('@prisma/client')
-const { ApolloServer, gql, UserInputError, AuthenticationError} = require('apollo-server')
+const {  UserInputError, AuthenticationError} = require('apollo-server')
 require('dotenv').config()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -9,10 +9,9 @@ const prisma = new PrismaClient()
 
 module.exports = {
     Query: {
-      getUsers: async (root, args, context) => {
+      getUsers: async (root, args, {currentUser}) => {
         
         try {
-          const currentUser = await context.currentUser
           if (!currentUser) {
             throw new AuthenticationError("not authenticated")
           }
@@ -22,11 +21,7 @@ module.exports = {
                 username: currentUser.username
               }
             },
-            // select: {
-            //   username: true,
-            //   imageUrl: true,
-            //   createdAt: true
-            // }
+            
           });
 
           const allUserMessages = await prisma.message.findMany({
@@ -148,17 +143,17 @@ module.exports = {
               throw new UserInputError('passwords must match', { errors })
             }
 
-            if (imageUrl.trim() === '')
-            errors.imageUrl = 'image url must not be empty'
-          
-            if (Object.keys(errors).length > 0) {
-              throw new UserInputError('image url must not be empty', { errors })
-            }
+            // if (imageUrl.trim() === ''){
+            // errors.imageUrl = 'image url must not be empty'
+            // }
+
+            // if (Object.keys(errors).length > 0) {
+            //   throw new UserInputError('image url must not be empty', { errors })
+            // }
           const passwordHash = await bcrypt.hash(password, 10)
           const newUser = await prisma.user.create({
             data: {
-              username, email, password: passwordHash, imageUrl
-            }
+              username, email, password: passwordHash, imageUrl: imageUrl || 'https://source.unsplash.com/random/300x300'}
           })
 
           return newUser;

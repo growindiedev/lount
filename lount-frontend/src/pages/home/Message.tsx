@@ -23,10 +23,10 @@ export default function Message({ message }: props) {
   const received = !sent
 
   return (
-    <Flex mt="10" width="100%">
+    <Flex  width="100%">
         <Tooltip placement="auto" label={moment(message.createdAt).format('MMMM DD, YYYY @ h:mm a')} fontSize="sm" hasArrow bg="gray.300">
-        <Box py="2" px="3" borderRadius="xl" bgColor={classNames({'blue.400': sent, 'green.400': received})} mx="10" ml={classNames({'auto': sent})} mr={classNames({'auto': received})}>
-        <Text  color="whiteAlpha.900" key="message.uuid">{message.content}</Text>
+        <Box py="1.5" px="3" borderRadius="xl" bgColor={classNames({'blue.400': sent, 'green.400': received})} mx="5" my="1.5" mb="0" ml={classNames({'auto': sent})} mr={classNames({'auto': received})}>
+        <Text  color="whiteAlpha.900" key="message.uuid" >{message.content}</Text>
         </Box>
         </Tooltip>
     </Flex>

@@ -22,14 +22,14 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : null,
+      authorization: token ? `Bearer ${token}` : '',
     },
   }
 })
 
 httpLink = authLink.concat(httpLink)
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/graphql`,
+  uri: 'ws://localhost:4000/graphql',
   options: {
     reconnect: true,
     connectionParams: {
