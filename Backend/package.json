@@ -12,15 +12,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@prisma/client": "^2.26.0",
     "@types/jwt-decode": "^3.1.0",
     "@types/node": "^15.6.0",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "eslint": "^7.26.0",
-    "prisma": "^2.25.0"
+    "prisma": "^2.26.0"
   },
   "dependencies": {
-    "@prisma/client": "^2.25.0",
     "@types/graphql": "^14.5.0",
     "apollo-link-context": "^1.0.20",
     "apollo-server": "^2.24.1",

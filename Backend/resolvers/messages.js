@@ -1,5 +1,5 @@
-const { UserInputError, AuthenticationError, withFilter, PubSub } = require('apollo-server')
-const { PrismaClient, Prisma } = require('@prisma/client')
+const { UserInputError, AuthenticationError, withFilter, ForbiddenError } = require('apollo-server')
+const { PrismaClient } = require('@prisma/client')
 require('dotenv').config()
 
 const client = new PrismaClient
@@ -16,8 +16,6 @@ module.exports = {
                  }
              })
              if (!otherUser) throw new UserInputError('User not found')
-           // const usernames = [currentUser.username, otherUser.username]
-
             const messages = await client.message.findMany({
                 where: {
                                      
@@ -71,7 +69,66 @@ module.exports = {
                 console.log(err)
                 throw err
             }
-        }
+        },
+        reactToMessage: async (_, { uuid, content }, { currentUser, pubsub }) => {
+          const reactions = ['❤️', '😆', '😯', '😢', '😡', '👍', '👎']
+    
+          try {
+            // Validate reaction content
+            if (!reactions.includes(content)) {
+              throw new UserInputError('Invalid reaction')
+            }
+    
+            // Get user
+            const username = currentUser ? currentUser.username : ''
+            currentUser = await client.user.findUnique({ where: {username } })
+            if (!currentUser) throw new AuthenticationError('Unauthenticated')
+    
+            // Get message
+            const message = await client.message.findFirst({ where: { uuid } })
+            if (!message) throw new UserInputError('message not found')
+    
+            if (message.from !== currentUser.username && message.to !== currentUser.username) {
+              throw new ForbiddenError('Unauthorized')
+            }
+    
+            let reaction = await client.reaction.findFirst({
+              where: {
+              AND:  [ {
+                messageId: message.id
+              },
+              {
+                userId: currentUser.id
+              }
+              ] }
+            })
+    
+            if (reaction) {
+              // Reaction exists, update it
+                reaction = await client.reaction.update({
+                where: { 
+                  id: reaction.id
+                },
+                data: {
+                  content
+                },
+                })
+              } else {
+                reaction = client.reaction.create({
+                  data: {
+                    messageId: message.id,
+                    userId: currentUser.id,
+                    content,
+                  }
+                })
+              }
+
+            pubsub.publish('NEW_REACTION', { newReaction: reaction })
+            return reaction
+          } catch (err) {
+            throw err
+          }
+        },
     },
 
     Subscription: {
@@ -79,7 +136,7 @@ module.exports = {
           subscribe: withFilter(
             (_, __, {  currentUser, pubsub }) => {
               if (!currentUser) throw new AuthenticationError('Unauthenticated')
-              return pubsub.asyncIterator(['NEW_MESSAGE'])
+              return pubsub.asyncIterator('NEW_MESSAGE')
             },
             ({ newMessage }, _, { currentUser }) => {
               if (
@@ -91,7 +148,31 @@ module.exports = {
     
               return false
             }
+          )},
+
+        newReaction: {
+          subscribe: withFilter(
+            (_, __, { pubsub, currentUser }) => {
+              if (!currentUser) throw new AuthenticationError('Unauthenticated')
+              return pubsub.asyncIterator('NEW_REACTION')
+            },
+            async ({ newReaction }, _, { currentUser }) => {
+              const { message } =  await client.reaction.findUnique({
+                where: {
+                  id: newReaction.id
+                },
+                include: {
+                  message: true
+                },
+              })
+              if (message.from === currentUser.username || message.to === currentUser.username) {
+                return true
+              }
+              return false
+            }
           ),
         },
+
+
       },
     }

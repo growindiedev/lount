@@ -9,6 +9,7 @@ const prisma = new PrismaClient()
 
 module.exports = {
     Query: {
+
       getUsers: async (root, args, {currentUser}) => {
         
         try {
@@ -87,12 +88,12 @@ module.exports = {
           }
   
           const token = await jwt.sign( userForToken, process.env.SECRET, {
-            expiresIn: 60 * 60,
+            expiresIn: 60 * 60 * 2,
           })
   
           return {
             ...user,
-            createdAt: user.createdAt,
+           // createdAt: user.createdAt,
             token,
           }
         } catch (err) {
@@ -150,6 +151,7 @@ module.exports = {
             // if (Object.keys(errors).length > 0) {
             //   throw new UserInputError('image url must not be empty', { errors })
             // }
+
           const passwordHash = await bcrypt.hash(password, 10)
           const newUser = await prisma.user.create({
             data: {
@@ -177,7 +179,6 @@ module.exports = {
             }
           }
           throw e;
-          
         }
 
       }
