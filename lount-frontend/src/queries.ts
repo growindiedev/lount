@@ -76,6 +76,14 @@ export const SEND_MESSAGE = gql`
   }
 `
 
+export const REACT_TO_MESSAGE = gql`
+  mutation reactToMessage($uuid: String!, $content: String!) {
+    reactToMessage(uuid: $uuid, content: $content) {
+      uuid
+    }
+  }
+`
+
 export const NEW_MESSAGE = gql`
 subscription newMessage {
   newMessage {
@@ -84,6 +92,20 @@ subscription newMessage {
     to
     content
     createdAt
+  }
+}
+`
+
+export const NEW_REACTION = gql`
+subscription newReaction {
+  newReaction {
+    uuid
+    content
+    message {
+      uuid
+      from
+      to
+    }
   }
 }
 `

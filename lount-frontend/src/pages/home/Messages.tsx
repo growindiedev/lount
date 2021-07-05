@@ -2,6 +2,8 @@ import React, { ReactElement, useEffect } from 'react'
 import {  useLazyQuery, useMutation } from '@apollo/client'
 import { GET_MESSAGES, SEND_MESSAGE } from '../../queries'
 import {getMessages} from '../../generated/getMessages'
+import {reactToMessage} from '../../generated/reactToMessage'
+
 import {  Input, InputGroup, InputRightElement, VStack, Box, Text} from '@chakra-ui/react'
 import { useMessageDispatch, useMessageState } from '../../context/message'
 import Message from './Message'
@@ -19,6 +21,7 @@ function Messages(): ReactElement {
         to: string,
         content: string,
         createdAt: string
+        reactions: any
     }
     
     const state: any = useMessageState()

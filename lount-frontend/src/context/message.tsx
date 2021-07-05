@@ -7,10 +7,12 @@ type Message_ = {
   to: string,
   content: string,
   createdAt: string
+  reactions?: string[]
 }
 
 //type Action = {type: 'SET_USERS', payload: {users: { username: string, message: Message_, messages: getMessages }}} | {type: 'SET_USER_MESSAGES', payload: {username: string, messages: getMessages}} | {type: 'SET_SELECTED_USER', payload: string} | {type: 'ADD_MESSAGE', payload: any}
-type Action = {type: 'SET_USERS' | 'SET_USER_MESSAGES' | 'SET_SELECTED_USER' | 'ADD_MESSAGE', payload: { username?: string, message?: Message_,  messages?: getMessages}} 
+type Action = {type: 'SET_USERS' | 'SET_USER_MESSAGES' | 'SET_SELECTED_USER' | 'ADD_MESSAGE' | 'ADD_REACTION', payload: any}
+//{ username?: string, message?: Message_,  messages?: getMessages, reactions?: any}} 
 
 type Dispatch = (action: Action ) => void
 type AuthProviderProps = {children: React.ReactNode}
@@ -23,7 +25,7 @@ const MessageDispatchContext = createContext<Dispatch | any>(undefined)
 
 const messageReducer = (state: any , action: Action) => {
   let usersCopy, userIndex
-  const { username, message, messages } = action.payload
+  const { username, message, messages, reaction } = action.payload
 
     switch (action.type) {
       case 'SET_USERS':
@@ -58,7 +60,9 @@ const messageReducer = (state: any , action: Action) => {
     case 'ADD_MESSAGE':
         usersCopy = [...state.users]
         userIndex = usersCopy.findIndex((u) => u.username === username)
-  
+
+        message.reactions = []
+
         let newUser = {
           ...usersCopy[userIndex],
           messages: usersCopy[userIndex].messages
@@ -71,6 +75,52 @@ const messageReducer = (state: any , action: Action) => {
           ...state,
           users: usersCopy,
         }
+
+    case 'ADD_REACTION':
+      usersCopy = [...state.users]
+
+      userIndex = usersCopy.findIndex((u) => u.username === username)
+
+      // Make a shallow copy of user
+      let userCopy = { ...usersCopy[userIndex] }
+
+      // Find the index of the message that this reaction pertains to
+      const messageIndex = userCopy.messages?.findIndex(
+        (m: Message_) => m.uuid === reaction.message.uuid
+      )
+
+      if (messageIndex > -1) {
+        // Make a shallow copy of user messages
+        let messagesCopy = [...userCopy.messages]
+
+        // Make a shallow copy of user message reactions
+        let reactionsCopy = [...messagesCopy[messageIndex].reactions]
+
+        const reactionIndex = reactionsCopy.findIndex(
+          (r) => r.uuid === reaction.uuid
+        )
+
+        if (reactionIndex > -1) {
+          // Reaction exists, update it
+          reactionsCopy[reactionIndex] = reaction
+        } else {
+          // New Reaction, add it
+          reactionsCopy = [...reactionsCopy, reaction]
+        }
+
+        messagesCopy[messageIndex] = {
+          ...messagesCopy[messageIndex],
+          reactions: reactionsCopy,
+        }
+
+        userCopy = { ...userCopy, messages: messagesCopy }
+        usersCopy[userIndex] = userCopy
+      }
+
+      return {
+        ...state,
+        users: usersCopy,
+      }
 
     default:
       throw new Error(`Unknown action type`)

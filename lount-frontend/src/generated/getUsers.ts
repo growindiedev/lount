@@ -21,7 +21,7 @@ export interface getUsers_getUsers {
   username: string;
   createdAt: string;
   token: string | null;
-  imageUrl: string;
+  imageUrl: string | null;
   latestMessage: getUsers_getUsers_latestMessage | null;
 }
 

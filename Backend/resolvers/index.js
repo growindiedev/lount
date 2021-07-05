@@ -12,10 +12,10 @@ module.exports = {
 
   Reaction: {
     createdAt: (parent) => parent.createdAt.toISOString(),
-    Message: async (parent) => await client.message.findUnique({where: {
+    message: async (parent) => await client.message.findUnique({where: {
       id: parent.messageId
     }}),
-    User: async (parent) =>
+    user: async (parent) =>
       await client.user.findUnique({
         where: {
         id: parent.userId

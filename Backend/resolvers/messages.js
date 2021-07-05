@@ -26,7 +26,11 @@ module.exports = {
 
                 orderBy: {
                     createdAt: 'desc'
-                } 
+                },
+                
+                include: {
+                  reactions: true
+                }
             })
             return messages
         } catch (erri){
@@ -150,6 +154,7 @@ module.exports = {
             }
           )},
 
+        
         newReaction: {
           subscribe: withFilter(
             (_, __, { pubsub, currentUser }) => {

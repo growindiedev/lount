@@ -23,5 +23,5 @@ export interface registerVariables {
   email: string;
   password: string;
   confirmPassword: string;
-  imageUrl: string
+  imageUrl?: string | null;
 }

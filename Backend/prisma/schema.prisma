@@ -17,7 +17,7 @@ model User {
   imageUrl  String
 
 
-  Reaction Reaction[]
+  reactions Reaction[]
   @@map("users")
 }
 
@@ -30,8 +30,8 @@ model Message {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
+  reactions Reaction[]
   @@map("messages")
-  Reaction Reaction[]
 }
 
 model Reaction {
