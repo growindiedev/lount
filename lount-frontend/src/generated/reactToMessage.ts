@@ -13,6 +13,7 @@ export interface reactToMessage_reactToMessage {
 }
 
 export interface reactToMessage {
+  length: number;
   map: any;
   content: string;
   reactToMessage: reactToMessage_reactToMessage;

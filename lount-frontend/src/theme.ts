@@ -18,9 +18,7 @@ const theme = extendTheme({
     },
   },
 
-  // components: {
-  //   IconButton,
-  // },
+  
 })
 
 export default theme

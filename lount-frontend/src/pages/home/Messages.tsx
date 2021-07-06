@@ -4,7 +4,7 @@ import { GET_MESSAGES, SEND_MESSAGE } from '../../queries'
 import {getMessages} from '../../generated/getMessages'
 import {reactToMessage} from '../../generated/reactToMessage'
 
-import {  Input, InputGroup, InputRightElement, VStack, Box, Text} from '@chakra-ui/react'
+import {  Input, InputGroup, InputRightElement, VStack, Box, Text, chakra} from '@chakra-ui/react'
 import { useMessageDispatch, useMessageState } from '../../context/message'
 import Message from './Message'
 import { useFormik } from 'formik';
@@ -83,9 +83,9 @@ function Messages(): ReactElement {
         <VStack  overflowY="scroll" width="100%" height="90%" flexDirection="column-reverse">
             {selectedChatMarkup}
         </VStack>
-        <Box width="100%">
-            <form  onSubmit={formik.handleSubmit}>
-            <InputGroup  mx="5" mb="2" height="10%" width="95%" isDisabled={selectAFriend}>
+        {/* <Box width="100%" > */}
+            <chakra.form width="100%" onSubmit={formik.handleSubmit} mt="10px">
+            <InputGroup  mx="5" mb="2" height="10%" width="95%" isDisabled={selectAFriend} >
             <InputRightElement children={<IoSend/>} as="button" type="submit" fontSize="xl" />
 						<Input 
 								type='text' name='messageContent'
@@ -101,8 +101,8 @@ function Messages(): ReactElement {
                 isDisabled={selectAFriend}
 							/>
 						</InputGroup>
-            </form>
-        </Box>
+            </chakra.form>
+        {/* </Box> */}
         </VStack>
     )
 }

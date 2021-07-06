@@ -94,7 +94,7 @@ const messageReducer = (state: any , action: Action) => {
         let messagesCopy = [...userCopy.messages]
 
         // Make a shallow copy of user message reactions
-        let reactionsCopy = [...messagesCopy[messageIndex].reactions]
+        let reactionsCopy = [...messagesCopy[messageIndex]?.reactions]
 
         const reactionIndex = reactionsCopy.findIndex(
           (r) => r.uuid === reaction.uuid
