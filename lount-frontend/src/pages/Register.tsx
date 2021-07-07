@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { useMutation } from '@apollo/client'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { BiUserCircle, BiImageAdd } from 'react-icons/bi'
 import {FcLock} from 'react-icons/fc'
 import {SiMinutemailer} from 'react-icons/si'
@@ -16,7 +16,9 @@ import {
 	FormControl,
 	Text,
   FormLabel,
-  VStack
+  VStack,
+  Image,
+  useToast
 } from '@chakra-ui/react';
 import {register, registerVariables} from '../generated/register'
 
@@ -33,10 +35,29 @@ const Register = () => {
 
   const [errors, setErrors] = useState<Values>()
   const history = useHistory()
+  const toast = useToast()
 
     const [registerUser, { loading }] = useMutation<register, registerVariables>(REGISTER_USER, {
-        update: (_, __) => history.push('/login'),
-        onError: (err: any) => setErrors(err.graphQLErrors[0].extensions.errors),
+        update: (_, __) => {  history.push('/login') 
+        toast({
+          title: "Account created.",
+          description: "We've created your account for you. Login and start chatting",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        })
+      },
+        onError: (err: any) => {
+          setErrors(err.graphQLErrors[0].extensions.errors)
+          toast({
+            title: "Bad inputs",
+            position: "bottom-right",
+            description: "Check your credentials and try again",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+            })
+        },
     })
 
     const formik = useFormik<Values>({
@@ -61,12 +82,13 @@ const Register = () => {
      return (
       <VStack spacing="5" p="10" pt="5" margin="20">
         <form onSubmit={formik.handleSubmit}>
-        <Stack spacing={3} bg="gray.200"
+        <Stack spacing={3} bg="orange.100"
         w='350px'
         p={5}
         boxShadow='m'
         rounded='lg'>
-          
+          					<Image src="LountWithText.png" mx='auto' mt={5} mb={5} width="30%" />
+
           <FormControl isRequired >
             <InputGroup>
               <InputLeftElement children={<BiUserCircle/>} />
@@ -153,10 +175,12 @@ const Register = () => {
             _active={{ boxShadow: 'lg' }}
             width="100"
             disabled={loading}
+            bg="orange.200"
+            color="orange.500"
             >
             {loading ? 'loading..' : 'Register'}
           </Button>
-          <Text fontSize="sm" textAlign="center" color="gray.500">Created by Jarryingnut 👨‍💻</Text>
+          <Text fontSize="sm" textAlign="center" color="teal.500">Created by Jarryingnut 👨‍💻</Text>
         </Stack>
       </form>
       </VStack>

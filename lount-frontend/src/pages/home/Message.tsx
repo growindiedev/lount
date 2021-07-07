@@ -1,8 +1,9 @@
-import React, {useState, useRef} from 'react'
+import React, {useState} from 'react'
 import moment from 'moment'
 import classNames from 'classnames'
 import { useAuthState } from '../../context/auth'
-import { Flex, Text, Box, Tooltip, IconButton, HStack,  Popover,
+import { 
+  Flex, Text, Box, Tooltip, IconButton, HStack,  Popover,
   PopoverTrigger,
   PopoverContent,
   Button, 
@@ -10,10 +11,8 @@ import { Flex, Text, Box, Tooltip, IconButton, HStack,  Popover,
 } from '@chakra-ui/react'
 import { useMutation } from '@apollo/client'
 import { REACT_TO_MESSAGE } from '../../queries'
-import {reactToMessage} from '../../generated/reactToMessage'
 import {HiOutlineEmojiHappy} from 'react-icons/hi'
-import {
-} from "@chakra-ui/react"
+
 
 
 
@@ -51,8 +50,7 @@ export default function Message({ message }: props) {
     setShowPopover(!showPopover)
   }
 
- // const reactionButton = <IconButton aria-label="reactionButton" color="gray.400" display="contents" icon={<HiOutlineEmojiHappy/>}/>
- //placement={classNames({'left': sent, 'right':received})}
+ 
   const reactionButton = 
   <Popover placement="top" isOpen={showPopover} >
   <PopoverTrigger >
@@ -74,11 +72,11 @@ export default function Message({ message }: props) {
 
 
   return (
-    <Flex width="100%" mb="5">
+    <Flex width="100%" mb="5" >
         <HStack mx="5" my="5" mb="0"  ml={classNames({'auto': sent})} mr={classNames({'auto': received})}  justifyContent="flex-start">
         {sent && reactionButton}
         <Tooltip placement="auto" m="0" label={moment(message.createdAt).format('MMMM DD, YYYY @ h:mm a')} fontSize="sm" hasArrow bg="gray.300" >
-        <Box py="1" px="3"  borderRadius="2xl" position="relative" bgColor={classNames({'blue.400': sent, 'green.400':received})}  >
+        <Box py="1.5" px="3"  borderRadius="2xl" position="relative" bgColor={classNames({'blue.400': sent, 'green.400':received})}  >
           {message.reactions.length > 0 && (
             <Box position="absolute" right="-10px" bottom="-20px" bg="gray.50" p="1" borderRadius="3xl" fontSize="xs" color="gray.500">
               {reactionIcons} {message.reactions.length}

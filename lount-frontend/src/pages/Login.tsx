@@ -2,15 +2,12 @@ import React, { useState }  from 'react'
 import {useFormik} from 'formik'
 import { BiUserCircle } from 'react-icons/bi'
 import {FcLock} from 'react-icons/fc'
-import { Link } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/client'
 import { LOGIN_USER } from '../queries'
 import { login, loginVariables } from '../generated/login'
 import { useAuthDispatch } from '../context/auth'
-import { VStack } from '@chakra-ui/react'
-
-
 import {
+	VStack, 
 	Input,
 	Stack,
 	InputGroup,
@@ -18,19 +15,32 @@ import {
 	Button,
 	FormControl,
 	Text,
-	FormLabel
+	FormLabel,
+	Image,
+	useToast
 } from '@chakra-ui/react';
 
 const Login = () => {
 
 	
 	const dispatch = useAuthDispatch()
+	const toast = useToast()
 
 	const [errors, setErrors] = useState<loginVariables | undefined>();
 	const [loginUser, { loading }] = useLazyQuery<login, loginVariables>(LOGIN_USER, {
-		onError: (err: any) => setErrors(err.graphQLErrors[0].extensions.errors),
-		onCompleted: ({login}) => {
-			dispatch({ type: 'LOGIN', payload: login })
+		onError: (err: any) => {
+			toast({
+				title: "Authentication Error",
+				position: "bottom-right",
+				description: "Check your credentials",
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			  })
+			  setErrors(err.graphQLErrors[0].extensions.errors)
+		},
+		onCompleted: async ({login}) => {
+			await dispatch({ type: 'LOGIN', payload: login })
 			window.location.href = '/'
 		},
 		
@@ -53,15 +63,17 @@ const Login = () => {
 	  });
     
      return (
-		<VStack spacing="5" p="10" margin="20">
+		<VStack spacing="10" p="10" margin="20">
 		<form onSubmit={formik.handleSubmit}>
-				<Stack spacing={3} bg="gray.200"
+				<Stack spacing={5} bg="orange.100"
 				w='350px'
 				p={5}
 				boxShadow='m'
 				rounded='lg'>
-				
+
 					<FormControl isRequired >
+					<Image src="LountWithText.png" mx='auto' mt={12} mb={10} width="30%" />
+						
 						<InputGroup>
 							<InputLeftElement children={<BiUserCircle/>} />
 							<Input 
@@ -99,11 +111,13 @@ const Login = () => {
 						_hover={{ boxShadow: 'md' }}
 						_active={{ boxShadow: 'lg' }}
 						width="100"
+						bg="orange.200"
+						color="orange.500"
 						disabled={loading}
 					>
               		{loading ? 'loading..' : 'Login'}
 					</Button>
-					<Text fontSize="sm" textAlign="center" color="gray.500">Created by Jarryingnut 👨‍💻 </Text>
+					<Text fontSize="sm" textAlign="center" color="teal.400">Created by Jarryingnut 👨‍💻 </Text>
 				</Stack>
 			</form>
 			</VStack>
