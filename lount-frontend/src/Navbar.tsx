@@ -9,7 +9,8 @@ const Navbar = () => {
     const dispatch = useAuthDispatch()
     const state: any = useAuthState()
     const toast =  useToast()
-  
+
+
     const  logout = async () => {
       await dispatch({ type: 'LOGOUT' }) 
      // window.location.href = '/login'
