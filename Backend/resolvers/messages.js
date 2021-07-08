@@ -17,17 +17,13 @@ module.exports = {
              })
              if (!otherUser) throw new UserInputError('User not found')
             const messages = await client.message.findMany({
-                where: {
-                                     
+                where: {                   
                     from: {in: [currentUser.username, otherUser.username]},
                     to: {in: [currentUser.username, otherUser.username]},
-
                 },
-
                 orderBy: {
                     createdAt: 'desc'
-                },
-                
+                },  
                 include: {
                   reactions: true
                 }
@@ -162,7 +158,7 @@ module.exports = {
               return pubsub.asyncIterator('NEW_REACTION')
             },
             async ({ newReaction }, _, { currentUser }) => {
-              const { message } =  await client.reaction.findUnique({
+              const { message } =  await client.reaction.findFirst({
                 where: {
                   id: newReaction.id
                 },
