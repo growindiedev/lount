@@ -15,8 +15,6 @@ import {HiOutlineEmojiHappy} from 'react-icons/hi'
 
 
 
-
-
 type Message_ = {
     uuid: string,
     from: string,
@@ -30,7 +28,7 @@ type props = {
     message: Message_
 }
 
-export default function Message({ message }: props) {
+ function Message({ message }: props) {
   const reactions = ['❤️', '😆', '😯', '😢', '😡', '👍', '👎']
   const state: any = useAuthState()
   const user = state?.user
@@ -44,8 +42,8 @@ export default function Message({ message }: props) {
     onCompleted: (data) => setShowPopover(false),
   })
 
-  const react = async (reaction: string) => {
-    await reactToMessage({ variables: { uuid: message.uuid, content: reaction } })
+  const react =  (reaction: string) => {
+     reactToMessage({ variables: { uuid: message.uuid, content: reaction } })
     console.log(reaction)
     setShowPopover(!showPopover)
   }
@@ -91,3 +89,4 @@ export default function Message({ message }: props) {
   )
 }
 
+export default React.memo(Message)

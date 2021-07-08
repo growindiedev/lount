@@ -128,7 +128,7 @@ const messageReducer = (state: any , action: Action) => {
 }
 
 
-export const MessageProvider = ({ children }: AuthProviderProps) => {
+const MessageProvider = ({ children }: AuthProviderProps) => {
   const [state, dispatch] = useReducer(messageReducer, { users: null })
 
   return (
@@ -139,6 +139,8 @@ export const MessageProvider = ({ children }: AuthProviderProps) => {
     </MessageDispatchContext.Provider>
   )
 }
+
+export default React.memo(React.memo(MessageProvider))
 
 export const useMessageState = () => useContext(MessageStateContext)
 export const useMessageDispatch = () => useContext(MessageDispatchContext)

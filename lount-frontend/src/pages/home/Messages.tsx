@@ -82,9 +82,8 @@ function Messages(): ReactElement {
         <VStack  overflowY="scroll" width="100%" height="90%" flexDirection="column-reverse">
             {selectedChatMarkup}
         </VStack>
-        {/* <Box width="100%" > */}
             <chakra.form width="100%" onSubmit={formik.handleSubmit} mt="10px">
-            <InputGroup  mx="5" mb="2" height="10%" width="95%" isDisabled={selectAFriend} >
+            <InputGroup  mx="5" mb="2" height="10%" width="95%">
             <InputRightElement children={<IoSend/>} as="button" type="submit" fontSize="xl" />
 						<Input 
 								type='text' name='messageContent'
@@ -101,7 +100,6 @@ function Messages(): ReactElement {
 							/>
 						</InputGroup>
             </chakra.form>
-        {/* </Box> */}
         </VStack>
     )
 }

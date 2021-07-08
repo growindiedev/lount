@@ -11,7 +11,7 @@ import Navbar from './Navbar'
 
 
 import { AuthProvider } from './context/auth'
-import { MessageProvider } from './context/message'
+import  MessageProvider  from './context/message'
 import theme from './theme'
 
 import DynamicRoute from './util/DynamicRoute'
