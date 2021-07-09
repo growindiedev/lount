@@ -1,6 +1,6 @@
 const { PrismaClient, Prisma } = require('@prisma/client')
-const {  UserInputError, AuthenticationError} = require('apollo-server')
 require('dotenv').config()
+const {  UserInputError, AuthenticationError} = require('apollo-server')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const prisma = new PrismaClient()

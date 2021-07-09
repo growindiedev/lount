@@ -1,5 +1,6 @@
 
 const { ApolloServer, PubSub } = require('apollo-server')
+require('dotenv').config 
 const { PrismaClient, Prisma } = require('@prisma/client')
 const jwt = require('jsonwebtoken')
 const pubsub = new PubSub()
@@ -30,10 +31,12 @@ const server = new ApolloServer({
     
     context.pubsub = pubsub  
     return context
-  }
+  },
+  subscriptions: {path: '/'}
 })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`🚀 Server ready at ${url}`)
-  
+  console.log(`🚀 Subscriptions ready at ${subscriptionsUrl}`)
+
 })
