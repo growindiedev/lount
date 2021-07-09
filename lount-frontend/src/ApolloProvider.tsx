@@ -63,3 +63,5 @@ const client = new ApolloClient({
 export default function ApolloProvider(props: any) {
   return <Provider client={client} {...props} />
 }
+
+// psql --host=lount.c3kyyudg0o1h.us-east-2.rds.amazonaws.com --port=5432 --username=jarryingnut --password --dbname=postgres
